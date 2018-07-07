@@ -2,86 +2,146 @@
 <html lang="en">
   <head>
     <title>
-      Salesforce and Nodejs Boiler Plate
+      Platform Event Demo
     </title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon"  type="image/icon"  href="Cloud Red.ico" />
   </head>
   <body>
 
-    <nav role="navigation" class="navbar navbar-default">
-      <div class="container-fluid">
-
-        <div class="navbar-header">
-          <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" class="navbar-toggle">
-            <span class="sr-only">
-              Toggle navigation
-            </span>
-            <span class="icon-bar">
-            </span>
-            <span class="icon-bar">
-            </span>
-            <span class="icon-bar">
-            </span>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <a href="https://JitendraZaa.com/blog" class="navbar-brand">
+            <span class="glyphicon glyphicon-cloud" style="vertical-align : middle" ></span> Platform Event Demo - <i class="Per80"> By Jitendra Zaa </i>
+           </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <a href="http://JitendraZaa.com/blog" class="navbar-brand">
-           <span class="glyphicon glyphicon-cloud" style="vertical-align : middle" ></span> Salesforce and Nodejs Boiler Plate
-          </a>
-        </div> 
-		
-		<ul class="nav navbar-nav navbar-right">
-            <li>  <a href="javascript:void(0)"  >
-                    <span class="glyphicon glyphicon-user"></span>  <span id="loggedInUser"> </span>  
-                  </a>      
-            </li>
-          </ul>
-		  
-		  <ul class="nav navbar-nav navbar-right">
-            <li>  <a href="javascript:void(0)"  >
-                    <span class="glyphicon glyphicon-cloud-upload"></span> API Count <span id="apiCount">0</span>  
-                  </a>      
-            </li>
-          </ul>
-		  
-       
-      </div>
-    </nav> 
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              </li> 
+            </ul> 
+          </div>
+        </nav> 
 
-	<div id="body"> 
-		 
-		<div class="form-group">
-		  <label class="col-md-2 control-label" for="Query to execute">Query to execute</label>  
-		  <div class="col-md-8">
-		  <input id="Query-to-execute" name="Query-to-execute" type="text" placeholder="Select Id, Name From Account" 
-		  class="form-control input-md" value="Select Id, Name From Account LIMIT 10" >
-		  </input> 
-		  </div>
-		</div> 
-		
-		<p class="info">Press enter to execute query</p> 
-		<pre id="result">
-			
-		</pre>
-	</div>
-  
+        <div class="container topPageMarging"> 
+            <div class="row">
+                <div class="col-9"> </div>
+                <div class="col-3">Checking platform event in <span id="span_sec">10</span> sec...</div>
+              </div>
+
+            
+        </div>
+        
+
+        <div class="container" id="eventContainer"> 
+
+        </div> 
+
+        <input  style="display:none;" value="0" id="lastId" />
          
   </body> 
-	<script type="text/javascript" src="/lib/jquery.js">  </script>
-	<script type="text/javascript" src="/lib/jqueryCookies.js"> </script>  
+  <script type="text/javascript" src="lib/jquery.js">  </script> 
+  <script type="text/javascript" src="lib/bootstrap.min.js">  </script> 
+
+
+  <script>
+      var div_eventContainer = $("#eventContainer");
+      var timer_dom = $("#span_sec");
+      var sec_counter = 10;
+      var lastId_dom = $("#lastId");
+
+      function addJSON_dom(eventResult){  
+        var formattedData = JSON.stringify(eventResult, null, 3); 
+
+        var div_card = $('<div class="card"></div>');
+        var div_card_body = div_card.append( '<div class="card-body" > </div>');
+        var  div_pre_blue = $('<pre class="blue"> </pre>');
+        div_pre_blue.text("replayId = "+eventResult.replayid);
+
+        var  div_pre = $('<pre> </pre>');
+        div_pre.text(formattedData);
+        div_card_body.append(div_pre_blue);
+        div_card_body.append(div_pre); 
+        
+        div_eventContainer.prepend(div_card);
+      }  
+
+      function changetime(timer_dom, sec_counter, lastId_dom){
+        sec_counter--;
+        if(sec_counter <= 0){
+          sec_counter = 10; 
+          checkPlatformEvents(lastId_dom);
+        }
+        timer_dom.html(sec_counter);
+        return sec_counter;
+      }
+
+      function checkPlatformEvents(lastId_dom){ 
+        var eventUrl = "/readEvents";
+        var lastId_val = parseInt(lastId_dom.val());
+
+        if(lastId_val && lastId_val > 0){
+          eventUrl = "/readEvents?lastId="+lastId_val;
+        } 
+        //console.log(eventUrl);
+        $.ajax({url: eventUrl, 
+            success: function(result){
+              //console.log(result);
+              if(result){
+                var maxId = 0;
+                for(i=0;i<result.length;i++){
+                  if( result[i].id > maxId){
+                    maxId = result[i].id
+                  }
+                  if(result[i]){
+                    addJSON_dom(result[i]);
+                  } 
+                }
+                if(maxId > 0){
+                  lastId_dom.val(maxId); 
+                }
+                
+              }  
+        }});
+      } 
+
+      changetime(timer_dom, sec_counter,lastId_dom);
+      window.setInterval(function() {
+                            sec_counter = changetime(timer_dom, sec_counter,lastId_dom) ;
+                          }
+                          ,  1000,); 
+
+  </script>
 <style>
-	#result{
-		margin-left : 15px;
-		margin-right : 15px;
-		margin-top : 30px;
-	}
-	.info{
-		display: block;
-		clear: both;
-		padding-left: 20%;
-		font-style: italic;
-		color: #888;
-		font-size: 1.2rem;
-	}
+	.Per80{
+    font-size: 0.8em; 
+  } 
+  .topPageMarging{
+    margin-top:70px;
+    font-size:12px;
+    color: #fd0c0c;
+  }
+  .card{
+    margin-top:10px;
+    background-color: #eee;
+  }
+ .blue{
+   color:rgb(73, 177, 40);
+   font-size: 14px;   
+ }
+
+  pre { 
+  font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;
+  font-size: 12px;  
+  padding-left:10px;
+  word-wrap: normal;
+    white-space: pre;
+    font-weight: normal;
+    color: #6f42c1;
+}
+
 </style>
  
 </html> 

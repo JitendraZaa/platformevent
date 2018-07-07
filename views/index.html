@@ -25,17 +25,10 @@
           </table>  
       </p>      
 
-      <p><a id="prodBtn" href="/auth/sfdc" role="button" style="margin-right:40px" class="btn btn-primary btn-lg"> Production</a>
+      <p><a id="prodBtn" href="/auth_sfdc?isProd=true" role="button" style="margin-right:40px" class="btn btn-primary btn-lg"> Production</a>
         
-        <a id="sandBtn" role="button" class="btn btn-primary btn-lg">Sandbox</a></p>
-    </div>
-     <script>  
-	 //do not redirect for localhost
-    if (window.location.protocol != "https:" && window.location.hostname != 'localhost'){
-		//window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-	}
-	    
-    </script>
+        <a id="sandBtn" href="/auth_sfdc?isProd=false" role="button" class="btn btn-primary btn-lg">Sandbox</a></p>
+    </div> 
     <script type="text/javascript" src="lib/jquery.js"></script>
     <script type="text/javascript" src="lib/jqueryCookies.js"></script>   
   </body>

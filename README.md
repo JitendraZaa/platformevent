@@ -1,13 +1,11 @@
-# Salesforce and NodeJs Boiler Plate
+# Subscribe to Salesforce Platform event using Nodejs & Heroku PostgreSQL 
 
-Simple Node.js application with OAuth for getting started with Salesforce Integration.
-It only uses ForceTk, JQuery and Bootstrap.
+Nodejs Application showing  how Salesforce Platform event can be subscribed using Nodejs and PostgreSQL database from Heroku.
 
-**Steps to run:**
-* Clone this repository
-* Create connected app in your Salesforce Instance
-* Update OAuth.js with clientId
-* Assuming Node.js is installed, run command `Node install`. It will download all needed modules
-* Finally execute `Node start`
+[Refer this post to understand how local Nodejs application can connect to Heroku PostgreSQL database](https://www.jitendrazaa.com/blog/salesforce/heroku/access-heroku-postgresql-database-locally-using-docker/)
+ 
+*Credits -* 
 
-And you are all set to fly high in cloud !!! 
+* nforce
+* Created from [Salesforce & NodeJs Boiler plate](https://github.com/JitendraZaa/SalesforceNodejsBoilerPlate)
+* [Online SQL Playground](http://sqlfiddle.com/#!17/02ded/1) 
