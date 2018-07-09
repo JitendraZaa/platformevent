@@ -16,11 +16,12 @@ app.use(bodyParser.json());
 app.set('port', process.env.PORT || 8080);
 
 const { Pool, Client } = require('pg') ; 
+//Replace below credentials otherwise it will not work
 const pool = new Pool({
-  user: 'wvvgxgeoriumxg',
-  host: 'ec2-107-22-168-211.compute-1.amazonaws.com',
-  database: 'd5siauekbh9qlu',
-  password: 'c4e8612ae286a211a8c94976df0811e9b6fcdacb3ef3e468401e0619b38a1004',
+  user: 'wvvgewewexgeoriumxg',
+  host: 'ec2-107-22-168-232.compute-1.amazonaws.com',
+  database: 'd5siauekbewh9qlu',
+  password: 'c4e8612ae286a211asdsds8c94976df0811e9b6fcdacb3ef3e468401e0619b38a1004',
   port: 5432,
   ssl:true
 }) ;
